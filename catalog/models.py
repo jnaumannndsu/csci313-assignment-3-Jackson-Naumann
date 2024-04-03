@@ -51,7 +51,6 @@ class Book(models.Model):
     genre = models.ManyToManyField(
         Genre, help_text="Select a genre for this book")
     
-    language = models.TextField(max_length = 200, unique = True, help_text="Enter the book's language (e.g. English, Japanese, Chinese, etc.)")
 
     def __str__(self):
         """String for representing the Model object."""
@@ -112,3 +111,16 @@ class Author(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.last_name}, {self.first_name}'
+
+class Language(models.Model):
+    """Model representing a Book's Language"""
+    name = models.CharField(max_length = 200, unique = True, help_text ="Enter a Book's natural language (e.g. English, Japanese, Chinese, etc.)")
+    
+    
+    def get_absolute_url(self):
+        """Returns the URL to access a particular author instance."""
+        return reverse('language-detail', args=[str(self.id)])
+    
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.name
