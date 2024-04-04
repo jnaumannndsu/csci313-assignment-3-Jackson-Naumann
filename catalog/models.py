@@ -1,11 +1,13 @@
 from django.db import models
-
+from django.conf import settings
 # Create your models here.
 
 from django.urls import reverse # Used in get_absolute_url() to get URL for specified ID
 
 from django.db.models import UniqueConstraint # Constrains fields to unique values
 from django.db.models.functions import Lower # Returns lower cased value of field
+from datetime import date
+# from django.contrib.auth.models import Librarian
 
 class Genre(models.Model):
     """Model representing a book genre."""
@@ -72,6 +74,17 @@ class BookInstance(models.Model):
     imprint = models.CharField(max_length=200)
     due_back = models.DateField(null=True, blank=True)
 
+    borrower = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    
+    @property
+    def is_overdue(self):
+        """Determines if the book is overdue based on due date and current date."""
+        return bool(self.due_back and date.today() > self.due_back)
+    
+    class Meta:
+        permissions = (("can_mark_returned", "Set book as returned"),)
+
+
     LOAN_STATUS = (
         ('m', 'Maintenance'),
         ('o', 'On loan'),
@@ -124,3 +137,5 @@ class Language(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return self.name
+    
+ 
