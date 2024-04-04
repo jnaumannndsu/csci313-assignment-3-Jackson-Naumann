@@ -39,6 +39,12 @@
    {% if user.is_staff %}
    <li><a href="{% url 'all-borrowed' %}">All Borrowed</a></li>
    {% endif %}
+   {% if perms.catalog.add_author %}
+   <li><a href="{% url 'author-create' %}">Create Author</a></li>
+  `{% endif %}
+   {% if perms.catalog.add_book %}
+   <li><a href="{% url 'book-create' %}">Create Book</a></li>
+   {% endif %}
             </ul>
           {% endblock %}
         </div>
