@@ -173,3 +173,26 @@ class BookDelete(PermissionRequiredMixin, DeleteView):
             return HttpResponseRedirect(
                 reverse("book-delete", kwargs={"pk": self.object.pk})
             )
+
+class GenreCreate(PermissionRequiredMixin, CreateView):
+    model = Genre
+    fields = ['name']
+    permission_required = 'catalog.add_genre'
+
+
+class GenreUpdate(PermissionRequiredMixin, UpdateView):
+    model = Genre
+    fields = ['name']
+    permission_required = 'catalog.change_genre'
+
+
+class GenreDelete(PermissionRequiredMixin, DeleteView):
+    model = Genre
+    success_url = reverse_lazy('genres')
+    permission_required = 'catalog.delete_genre'
+
+class GenreListView(generic.ListView):
+    model = Genre
+
+class GenreDetailView(generic.DetailView):
+    model = Genre
